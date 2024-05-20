@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/e/Code/C++ webdev/Video-algo/Backend/video_algo
+# Install script for directory: /mnt/c/Users/rk181/OneDrive/Documents/GitHub/Video-recommendation/Backend/video_algo
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/e/Code/C++ webdev/Video-algo/Backend/video_algo/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Users/rk181/OneDrive/Documents/GitHub/Video-recommendation/Backend/video_algo/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
