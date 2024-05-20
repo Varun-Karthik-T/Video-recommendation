@@ -1,3 +1,0 @@
-/mnt/c/Users/rk181/OneDrive/Documents/GitHub/Video-recommendation/Backend/video_algo/build/CMakeFiles/video_algo.dir
-/mnt/c/Users/rk181/OneDrive/Documents/GitHub/Video-recommendation/Backend/video_algo/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/rk181/OneDrive/Documents/GitHub/Video-recommendation/Backend/video_algo/build/CMakeFiles/rebuild_cache.dir
