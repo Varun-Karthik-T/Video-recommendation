@@ -1,0 +1,3 @@
+/mnt/e/Code/C++ webdev/Video-algo/Backend/video_algo/build/CMakeFiles/video_algo.dir
+/mnt/e/Code/C++ webdev/Video-algo/Backend/video_algo/build/CMakeFiles/edit_cache.dir
+/mnt/e/Code/C++ webdev/Video-algo/Backend/video_algo/build/CMakeFiles/rebuild_cache.dir
