@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -12,10 +13,11 @@ struct Video
     string name;
     string link;
     string genre;
-    int weightage;
 
-    Video(int _id, const string &_name, const string &_link, const string &_genre, int _weightage)
-        : id(_id), name(_name), link(_link), genre(_genre), weightage(_weightage) {}
+    Video() : id(0), name(""), link(""), genre("") {}
+
+    Video(int _id, const string &_name, const string &_link, const string &_genre)
+        : id(_id), name(_name), link(_link), genre(_genre) {}
 };
 
 struct SplayTreeNode
@@ -51,6 +53,28 @@ public:
     void printTree() const
     {
         printTree(root, 0);
+    }
+
+    vector<Video> traverse() const
+    {
+        vector<Video> result;
+        traverse(root, result);
+        return result;
+    }
+
+    void traverse(SplayTreeNode *node, vector<Video> &result) const
+    {
+        if (node)
+        {
+            traverse(node->left, result);
+            result.push_back(node->video);
+            traverse(node->right, result);
+        }
+    }
+
+    bool isEmpty() const
+    {
+        return root == nullptr;
     }
 
 private:

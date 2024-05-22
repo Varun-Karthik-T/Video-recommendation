@@ -1,25 +1,20 @@
-import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from "./pages/home"
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/home';
+import Video from './pages/video';
+import Header from './components/header';
 
 function App() {
-
-
   return (
-    <>
-      <div className='bg-black m-0 p-10'>
-        <Router >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<p>about</p>} />
-
-          </Routes>
-
-        </Router>
-      </div>
-    </>
-  )
+    <div>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/video/:id" element={<Video />} />
+        </Routes>
+      </Router>
+    </div>
+  );
 }
 
-export default App
+export default App;
