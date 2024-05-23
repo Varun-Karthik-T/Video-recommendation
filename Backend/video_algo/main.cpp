@@ -1,13 +1,51 @@
 #include "crow.h"
 #include "splay.h"
-// #include "json.hpp"
-// #include "graph.h"
+#include "graph.h"
 #include <sstream>
+#include <unordered_set>
+
+class CORSHandler
+{
+public:
+    struct context
+    {
+    };
+
+    void before_handle(crow::request &req, crow::response &res, context &)
+    {
+        res.add_header("Access-Control-Allow-Origin", "*"); // Allow all origins
+        res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+        if (req.method == "OPTIONS"_method)
+        {
+            res.code = 204;
+            res.end();
+        }
+    }
+
+    void after_handle(crow::request &req, crow::response &res, context &)
+    {
+        res.add_header("Access-Control-Allow-Origin", "*"); // Allow all origins
+        res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    }
+};
 
 int main()
 {
-    crow::SimpleApp app;
+    crow::App<CORSHandler> app;
+
     SplayTree splayTree;
+    Graph graph;
+    graph.loadVertices("videos.txt");
+    graph.loadEdges("edges.txt");
+
+    cout << "Vertices in the graph:" << endl;
+    graph.printVertices();
+
+    cout << "\nAdjacency List:" << endl;
+    graph.printAdjacencyList();
 
     CROW_ROUTE(app, "/api/v1/")
     ([]()
@@ -16,94 +54,133 @@ int main()
     CROW_ROUTE(app, "/api/v1/video")
         .methods("POST"_method)([&splayTree](const crow::request &req)
                                 {
-        // cout << "what is this";
         auto json = crow::json::load(req.body);
         if (!json)
         {
             return crow::response(400, "Invalid JSON");
         }
 
-        if (!json.has("id") || !json.has("name") || !json.has("link") || !json.has("genre"))
+        if (!json.has("id") || !json.has("name") || !json.has("video_link") || !json.has("genres") || !json.has("thumbnail_link") || !json.has("description"))
         {
             return crow::response(400, "Missing required fields");
         }
 
         int id = json["id"].i();
         std::string name = json["name"].s();
-        std::string link = json["link"].s();
-        std::string genre = json["genre"].s();
-
-        Video video(id, name, link, genre);
+        std::string video_link = json["video_link"].s();
+        std::string genres = json["genres"].s();
+        std::string thumbnail_link=json["thumbnail_link"].s();
+        std::string description=json["description"].s();
+        Video video(id, name, description, video_link,thumbnail_link , genres);
         splayTree.insert(video);
         splayTree.printTree();
 
         return crow::response(200); });
 
-    // CROW_ROUTE(app, "/api/v1/video/<int>")
-    // ([&splayTree](int id)
-    //  {
-    //     Video *video = splayTree.find(id);
-    //     if (video)
-    //     {
-    //         crow::json::wvalue jsonResp;
-    //         jsonResp["id"] = video->id;
-    //         jsonResp["name"] = video->name;
-    //         jsonResp["link"] = video->link;
-    //         jsonResp["genre"] = video->genre;
+    CROW_ROUTE(app, "/api/v1/video/suggestion")
+        .methods("GET"_method)([&splayTree, &graph](const crow::request &req)
+                               {
 
-    //         return crow::response(jsonResp);
-    //     }
-    //     return crow::response(404); });
+                            cout<<".....Fetching Video Content....\n";
+        if (splayTree.isEmpty())
+        {
+            vector<Video> allVideos = graph.getAllVideos();
+            cout<<"Suggested videos are:\n";
+        for (int i = 0; i < allVideos.size(); ++i)
+        {
+            
+            cout<<allVideos[i].id<<" ";
+        }
+        cout<<endl;
+            
 
-    // CROW_ROUTE(app, "/api/v1/video/suggestion")
-    //     .methods("POST"_method)([&splayTree, &graph](const crow::request &req)
-    //                             {
-    // // Check if the splay tree is empty
-    // if (splayTree.isEmpty())
-    // {
-    //     // If the splay tree is empty, fetch all videos from the graph
-    //     vector<Video> allVideos = graph.getAllVideos();
-    //     // Convert the vector of videos to a JSON array
-    //     crow::json::wvalue jsonResp;
-    //     jsonResp["videos"] = crow::json::load(allVideos);
-    //     return crow::response(jsonResp);
-    // }
+            crow::json::wvalue jsonResp;
+            jsonResp["videos"] = crow::json::wvalue::list();
+            for (size_t i = 0; i < allVideos.size(); ++i)
+            {
+                const auto &video = allVideos[i];
+                jsonResp["videos"][i] = crow::json::wvalue{
+                    {"id", video.id},
+                    {"name", video.name},
+                    {"description", video.description},
+                    {"video_link", video.video_link},
+                    {"thumbnail_link", video.thumbnail_link},
+                    {"genres", video.genres}
+                };
+            }
+            return crow::response(jsonResp);
+        }
 
-    // // If the splay tree is not empty, traverse it to get all videos
-    // vector<Video> splayVideos = splayTree.traverse();
+        vector<Video> splayVideos = splayTree.traverse();
+    
 
-    // // Create a set to store unique video IDs
-    // unordered_set<int> uniqueIds;
+        
+        unordered_set<int> uniqueIds;
 
-    // // Traverse through the splay tree videos and store their IDs in the set
-    // for (const auto &video : splayVideos)
-    // {
-    //     uniqueIds.insert(video.id);
-    // }
+        for (const auto &video : splayVideos)
+        {
+            uniqueIds.insert(video.id);
+        }
 
-    // // Create a vector to store final suggested videos
-    // vector<Video> suggestedVideos;
+    
+        vector<Video> suggestedVideos;
 
-    // // Traverse through the splay tree videos and find related videos for each
-    // for (const auto &video : splayVideos)
-    // {
-    //     // Get related videos from the graph for the current video
-    //     vector<Video> relatedVideos = graph.getRelatedVideos(video.id,video.genre,4);
-
-    //     // Traverse through the related videos and add them to the final list if not already watched
-    //     for (const auto &relatedVideo : relatedVideos)
-    //     {
-    //         if (uniqueIds.find(relatedVideo.id) == uniqueIds.end())
-    //         {
-    //             suggestedVideos.push_back(relatedVideo);
-    //         }
-    //     }
-    // }
-
-    // // Convert the vector of suggested videos to a JSON array
-    // crow::json::wvalue jsonResp;
-    // jsonResp["videos"] = crow::json::load(suggestedVideos);
-    // return crow::response(jsonResp); });
+        for (const auto &video : splayVideos)
+        {
+            
+            vector<Video> relatedVideos = graph.getRelatedVideos(video.id, video.genres, 4);
+          
+          
+            for (const auto &relatedVideo : relatedVideos)
+            {
+                if (uniqueIds.find(relatedVideo.id) == uniqueIds.end())
+                {
+                    suggestedVideos.push_back(relatedVideo);
+                }
+            }
+        }
+        
+        if (suggestedVideos.size() < 15)
+        {
+            vector<Video> allVideos = graph.getAllVideos();
+            for (const auto &video : allVideos)
+            {
+                if (uniqueIds.find(video.id) == uniqueIds.end())
+                {   
+                    suggestedVideos.push_back(video);
+                    uniqueIds.insert(video.id); 
+                    if (suggestedVideos.size() >= 15) {
+                        break;
+                    }
+                }
+            }
+        }
+        cout<<"Suggested videos are:\n";
+        for (int i = 0; i < suggestedVideos.size(); ++i)
+        {
+            
+            cout<<suggestedVideos[i].id<<" ";
+        }
+        cout<<endl;
+        
+        
+        crow::json::wvalue jsonResp;
+        jsonResp["videos"] = crow::json::wvalue::list();
+        if(suggestedVideos.size()){}
+        for (size_t i = 0; i < suggestedVideos.size(); ++i)
+        {
+            //cout<<suggestedVideos[i].id<<" ";
+            const auto &video = suggestedVideos[i];
+            jsonResp["videos"][i] = crow::json::wvalue{
+                {"id", video.id},
+                {"name", video.name},
+                {"description", video.description},
+                {"video_link", video.video_link},
+                {"thumbnail_link", video.thumbnail_link},
+                {"genres", video.genres}
+            };
+        }
+        return crow::response(jsonResp); });
 
     app.port(18080).multithreaded().run();
 

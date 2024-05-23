@@ -11,13 +11,15 @@ struct Video
 {
     int id;
     string name;
-    string link;
-    string genre;
+    string description;
+    string video_link;
+    string thumbnail_link;
+    string genres;
 
-    Video() : id(0), name(""), link(""), genre("") {}
+    Video() : id(0), name(""), description(""), video_link(""), thumbnail_link(""), genres("") {}
 
-    Video(int _id, const string &_name, const string &_link, const string &_genre)
-        : id(_id), name(_name), link(_link), genre(_genre) {}
+    Video(int _id, const string &_name, const string &_description, const string &_video_link, const string &_thumbnail_link, const string &_genres)
+        : id(_id), name(_name), description(_description), video_link(_video_link), thumbnail_link(_thumbnail_link), genres(_genres) {}
 };
 
 struct SplayTreeNode

@@ -6,6 +6,10 @@
 #include <queue>
 #include <algorithm>
 #include <unordered_set>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <iostream>
 #include "splay.h"
 
 using namespace std;
@@ -36,7 +40,8 @@ public:
 
     vector<Video> aStar(int startId, const string &targetGenre, int numResults)
     {
-        priority_queue<pair<int, int>, vector<pair<int, int>>, std::greater<int>> pq;
+        using QueueElement = pair<int, int>;
+        priority_queue<QueueElement, vector<QueueElement>, greater<QueueElement>> pq;
         unordered_map<int, int> cost;
         unordered_map<int, int> heuristic;
         unordered_map<int, int> cameFrom;
@@ -45,26 +50,30 @@ public:
         pq.push({0, startId});
         cost[startId] = 0;
 
-        unordered_set<int> visited; // Track visited nodes
+        unordered_set<int> visited;
 
         while (!pq.empty() && foundVideos.size() < numResults)
         {
-            auto [currentCost, currentId] = pq.top();
+            QueueElement currentElement = pq.top();
             pq.pop();
+            int currentCost = currentElement.first;
+            int currentId = currentElement.second;
 
-            if (visited.find(currentId) != visited.end()) // Skip if already visited
+            if (visited.find(currentId) != visited.end())
             {
                 continue;
             }
-            visited.insert(currentId); // Mark as visited
+            visited.insert(currentId);
 
-            if (currentId != startId && videos[currentId].genre == targetGenre)
+            if (currentId != startId && videos[currentId].genres.find(targetGenre) != string::npos)
             {
                 foundVideos.push_back(videos[currentId]);
             }
 
-            for (auto [neighborId, weight] : adjList[currentId])
+            for (const auto &neighbor : adjList[currentId])
             {
+                int neighborId = neighbor.first;
+                int weight = neighbor.second;
                 int newCost = currentCost + weight;
                 if (cost.find(neighborId) == cost.end() || newCost < cost[neighborId])
                 {
@@ -78,9 +87,11 @@ public:
         return reconstructPath(startId, foundVideos, cameFrom);
     }
 
-    pair<vector<Video>, vector<Video>> aStar1(int startId, const string &targetGenre, int numResults)
+    vector<Video> aStar1(int startId, const string &targetGenre, int numResults)
     {
-        priority_queue<pair<int, int>, vector<pair<int, int>>, std::greater<int>> pq;
+
+        using QueueElement = pair<int, int>;
+        priority_queue<QueueElement, vector<QueueElement>, greater<QueueElement>> pq;
         unordered_map<int, int> cost;
         unordered_map<int, int> heuristic;
         unordered_map<int, int> cameFrom;
@@ -89,26 +100,32 @@ public:
         pq.push({0, startId});
         cost[startId] = 0;
 
-        unordered_set<int> visited; // Track visited nodes
-
+        unordered_set<int> visited;
         while (!pq.empty() && foundVideos.size() < numResults)
         {
-            auto [currentCost, currentId] = pq.top();
-            pq.pop();
 
-            if (visited.find(currentId) != visited.end()) // Skip if already visited
+            QueueElement currentElement = pq.top();
+
+            pq.pop();
+            int currentCost = currentElement.first;
+            int currentId = currentElement.second;
+
+            if (visited.find(currentId) != visited.end())
             {
                 continue;
             }
-            visited.insert(currentId); // Mark as visited
+            visited.insert(currentId);
 
-            if (currentId != startId && videos[currentId].genre == targetGenre)
+            if (currentId != startId && videos[currentId].genres.find(targetGenre) != string::npos)
             {
+
                 foundVideos.push_back(videos[currentId]);
             }
 
-            for (auto [neighborId, weight] : adjList[currentId])
+            for (const auto &neighbor : adjList[currentId])
             {
+                int neighborId = neighbor.first;
+                int weight = neighbor.second;
                 int newCost = currentCost + weight;
                 if (cost.find(neighborId) == cost.end() || newCost < cost[neighborId])
                 {
@@ -120,13 +137,91 @@ public:
             }
         }
         vector<Video> path = reconstructPath(startId, foundVideos, cameFrom);
-        return make_pair(foundVideos, path);
+
+        return foundVideos;
     }
 
     vector<Video> getRelatedVideos(int id, const string &targetGenre, int numResults)
     {
-        auto [foundVideos, _] = aStar1(id, targetGenre, numResults);
-        return foundVideos;
+
+        auto result = aStar1(id, targetGenre, numResults);
+        return result;
+    }
+
+    void loadVertices(const string &filename)
+    {
+        ifstream file(filename);
+        if (file.is_open())
+        {
+            string line;
+            while (getline(file, line))
+            {
+                stringstream ss(line);
+                int id;
+                string name, description, video_link, thumbnail_link, genres;
+                getline(ss, line, ',');
+                id = stoi(line);
+                getline(ss, name, ',');
+                getline(ss, description, ',');
+                getline(ss, video_link, ',');
+                getline(ss, thumbnail_link, ',');
+                getline(ss, genres, ',');
+                Video video(id, name, description, video_link, thumbnail_link, genres);
+                addVideo(video);
+            }
+            file.close();
+        }
+        else
+        {
+            cerr << "Unable to open file: " << filename << endl;
+        }
+    }
+
+    void loadEdges(const string &filename)
+    {
+        ifstream file(filename);
+        if (file.is_open())
+        {
+            string line;
+            while (getline(file, line))
+            {
+                stringstream ss(line);
+                int from, to, weight;
+                char comma;
+                ss >> from >> comma >> to >> comma >> weight;
+                addEdge(from, to, weight);
+            }
+            file.close();
+        }
+        else
+        {
+            cerr << "Unable to open file: " << filename << endl;
+        }
+    }
+
+    void printVertices() const
+    {
+        for (const auto &entry : videos)
+        {
+            const Video &video = entry.second;
+            cout << "ID: " << video.id << ", Name: " << video.name
+                 << ", Description: " << video.description
+                 << ", Video Link: " << video.video_link
+                 << ", Thumbnail Link: " << video.thumbnail_link
+                 << ", Genres: " << video.genres << endl;
+        }
+    }
+
+    void printAdjacencyList() const
+    {
+        for (const auto &entry : adjList)
+        {
+            cout << "Video ID " << entry.first << " is connected to:" << endl;
+            for (const auto &neighbor : entry.second)
+            {
+                cout << "    Video ID " << neighbor.first << " with weight " << neighbor.second << endl;
+            }
+        }
     }
 
 private:
@@ -135,7 +230,7 @@ private:
 
     int estimateHeuristic(int id, const string &targetGenre)
     {
-        return videos[id].genre == targetGenre ? 0 : 1;
+        return videos[id].genres.find(targetGenre) != string::npos ? 0 : 1;
     }
 
     vector<Video> reconstructPath(int startId, const vector<Video> &foundVideos, unordered_map<int, int> &cameFrom)
@@ -147,8 +242,8 @@ private:
         {
             if (!firstPath)
             {
-                // Add a separation between paths
-                path.push_back(Video(-1, "----------", "----------", "----------"));
+
+                path.push_back(Video(-1, "----------", "----------", "----------", "----------", "----------"));
             }
             firstPath = false;
 

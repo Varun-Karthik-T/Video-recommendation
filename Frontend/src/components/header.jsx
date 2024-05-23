@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <>
       <h1 className="text-4xl font-bold my-5 mx-5 cursor-pointer" onClick={() => navigate("/")}>
-        YouTube Home
+        AStar Videos
       </h1>
       <Separator className="my-3" />
     </>

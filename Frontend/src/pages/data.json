@@ -1,0 +1,242 @@
+[
+    {
+        "id": 1,
+        "title": "Action Thriller Marathon",
+        "description": "A selection of the best action thrillers.",
+        "video_url": "https://www.youtube.com/embed/jqd-OHU7OMw?si=EUU5M0BgJDF4OovS",
+        "thumbnail_url": "http://example.com/thumbnail1",
+        "genre": "Action"
+    },
+    {
+        "id": 2,
+        "title": "Romantic Comedy Collection",
+        "description": "Laugh and love with these romantic comedies.",
+        "video_url": "https://www.youtube.com/embed/7l8b2HaelAw?si=tWT-6HON964gHxi2",
+        "thumbnail_url": "http://example.com/thumbnail2",
+        "genre": "Comedy"
+    },
+    {
+        "id": 3,
+        "title": "Sci-Fi Extravaganza",
+        "description": "Explore the universe with these sci-fi films.",
+        "video_url": "https://www.youtube.com/embed/S6Pbm8sD7gM?si=dbWgHqtgO5baJOzS",
+        "thumbnail_url": "http://example.com/thumbnail3",
+        "genre": "Science"
+    },
+    {
+        "id": 4,
+        "title": "Horror Night",
+        "description": "Get spooked with these horror classics.",
+        "video_url": "https://www.youtube.com/embed/zlpfcKffgDA?si=lBZD-o84DyRomrmX",
+        "thumbnail_url": "http://example.com/thumbnail4",
+        "genre": "Horror"
+    },
+    {
+        "id": 5,
+        "title": "Animated Favorites",
+        "description": "Enjoy these top animated movies for all ages.",
+        "video_url": "https://www.youtube.com/embed/P4UmQKY8oYk?si=eqjKXhpnbaVOSlIW",
+        "thumbnail_url": "http://example.com/thumbnail5",
+        "genre": "Animation"
+    },
+    {
+        "id": 6,
+        "title": "Documentary Insights",
+        "description": "Learn from these insightful documentaries.",
+        "video_url": "https://www.youtube.com/embed/XOfeqRgaF1A?si=XR4ehfGng6qXx-tq",
+        "thumbnail_url": "http://example.com/thumbnail6",
+        "genre": "Documentary"
+    },
+    {
+        "id": 7,
+        "title": "Classic Cinema",
+        "description": "Relive the golden age of cinema with these classics.",
+        "video_url": "https://www.youtube.com/embed/LwhtXgmsPZA?si=AMi7fUzRHXL5mFhR",
+        "thumbnail_url": "http://example.com/thumbnail7",
+        "genre": "Classic"
+    },
+    {
+        "id": 8,
+        "title": "Fantasy Adventures",
+        "description": "Dive into magical worlds with these fantasy films.",
+        "video_url": "https://www.youtube.com/embed/uMVY26i3b_A?si=Bmn9bCzDRDxcFSfx",
+        "thumbnail_url": "http://example.com/thumbnail8",
+        "genre": "Fantasy"
+    },
+    {
+        "id": 9,
+        "title": "Superhero Blockbusters",
+        "description": "Watch your favorite superheroes in action.",
+        "video_url": "https://www.youtube.com/embed/eMqM_oe1MdI?si=HQXHM8cPB11n84P",
+        "thumbnail_url": "http://example.com/thumbnail9",
+        "genre": "Action"
+    },
+    {
+        "id": 10,
+        "title": "Mystery & Suspense",
+        "description": "Unravel mysteries with these suspenseful films.",
+        "video_url": "https://www.youtube.com/embed/KoxxBeH7J3Q?si=kkQtMf8sV2V_TMnh",
+        "thumbnail_url": "http://example.com/thumbnail10",
+        "genre": "Mystery"
+    },
+    {
+        "id": 11,
+        "title": "Family Fun",
+        "description": "Movies the whole family can enjoy together.",
+        "video_url": "https://www.youtube.com/embed/PkdAOJ9ZdO0?si=QRttemSvwYqKpse4",
+        "thumbnail_url": "http://example.com/thumbnail11",
+        "genre": "Family"
+    },
+    {
+        "id": 12,
+        "title": "Crime Dramas",
+        "description": "Engage with these intense crime dramas.",
+        "video_url": "https://www.youtube.com/embed/Q0QoCgbwPjs?si=FSCpp9oSI63jdrqw",
+        "thumbnail_url": "http://example.com/thumbnail12",
+        "genre": "Drama"
+    },
+    {
+        "id": 13,
+        "title": "Musical Magic",
+        "description": "Sing along with these hit musicals.",
+        "video_url": "https://www.youtube.com/embed/0pdqf4P9MB8?si=PqiDui67d87-HOZK",
+        "thumbnail_url": "https://picsum.photos/200/300",
+        "genre": "Musical"
+    },
+    {
+        "id": 14,
+        "title": "War Epics",
+        "description": "Experience the drama of war through these epic films.",
+        "video_url": "https://www.youtube.com/embed/n9xhJrPXop4?si=4j6-FoziKwEHv7o4",
+        "thumbnail_url": "http://example.com/thumbnail14",
+        "genre": "Drama"
+    },
+    {
+        "id": 15,
+        "title": "Comedy Gold",
+        "description": "Laugh out loud with these comedy hits.",
+        "video_url": "https://www.youtube.com/embed/15",
+        "thumbnail_url": "http://example.com/thumbnail15",
+        "genre": "Comedy"
+    },
+    {
+        "id": 16,
+        "title": "Western Legends",
+        "description": "Saddle up for these classic westerns.",
+        "video_url": "https://www.youtube.com/embed/16",
+        "thumbnail_url": "http://example.com/thumbnail16",
+        "genre": "Western"
+    },
+    {
+        "id": 17,
+        "title": "Romantic Dramas",
+        "description": "Feel the love with these romantic dramas.",
+        "video_url": "https://www.youtube.com/embed/17",
+        "thumbnail_url": "http://example.com/thumbnail17",
+        "genre": "Drama"
+    },
+    {
+        "id": 18,
+        "title": "Biographical Films",
+        "description": "Learn about extraordinary lives with these biopics.",
+        "video_url": "https://www.youtube.com/embed/18",
+        "thumbnail_url": "http://example.com/thumbnail18",
+        "genre": "Biography"
+    },
+    {
+        "id": 19,
+        "title": "Fantasy Epics",
+        "description": "Immerse yourself in epic fantasy adventures.",
+        "video_url": "https://www.youtube.com/embed/19",
+        "thumbnail_url": "http://example.com/thumbnail19",
+        "genre": "Western"
+    },
+    {
+        "id": 20,
+        "title": "Historical Dramas",
+        "description": "Travel back in time with these historical dramas.",
+        "video_url": "https://www.youtube.com/embed/20",
+        "thumbnail_url": "http://example.com/thumbnail20",
+        "genre": "Drama"
+    },
+    {
+        "id": 21,
+        "title": "Animated Adventures",
+        "description": "Join animated characters on their exciting journeys.",
+        "video_url": "https://www.youtube.com/embed/21",
+        "thumbnail_url": "http://example.com/thumbnail21",
+        "genre": "Animation"
+    },
+    {
+        "id": 22,
+        "title": "Thriller Collection",
+        "description": "Edge-of-your-seat thrills in these top picks.",
+        "video_url": "https://www.youtube.com/embed/22",
+        "thumbnail_url": "http://example.com/thumbnail22",
+        "genre": "Thriller"
+    },
+    {
+        "id": 23,
+        "title": "Cult Classics",
+        "description": "Discover these cult favorites and hidden gems.",
+        "video_url": "https://www.youtube.com/embed/23",
+        "thumbnail_url": "http://example.com/thumbnail23",
+        "genre": "Musical"
+    },
+    {
+        "id": 24,
+        "title": "Holiday Specials",
+        "description": "Celebrate the season with these holiday movies.",
+        "video_url": "https://www.youtube.com/embed/24",
+        "thumbnail_url": "http://example.com/thumbnail24",
+        "genre": "Action"
+    },
+    {
+        "id": 25,
+        "title": "Indie Favorites",
+        "description": "Explore these acclaimed independent films.",
+        "video_url": "https://www.youtube.com/embed/25",
+        "thumbnail_url": "http://example.com/thumbnail25",
+        "genre": "Animation"
+    },
+    {
+        "id": 26,
+        "title": "Action Comedies",
+        "description": "Laugh and thrill with these action-packed comedies.",
+        "video_url": "https://www.youtube.com/embed/26",
+        "thumbnail_url": "http://example.com/thumbnail26",
+        "genre": "Comedy"
+    },
+    {
+        "id": 27,
+        "title": "Psychological Thrillers",
+        "description": "Dive deep into the mind with these thrillers.",
+        "video_url": "https://www.youtube.com/embed/27",
+        "thumbnail_url": "http://example.com/thumbnail27",
+        "genre": "Thriller"
+    },
+    {
+        "id": 28,
+        "title": "Sports Films",
+        "description": "Get inspired by these sports movies.",
+        "video_url": "https://www.youtube.com/embed/28",
+        "thumbnail_url": "http://example.com/thumbnail28",
+        "genre": "Sports"
+    },
+    {
+        "id": 29,
+        "title": "Dystopian Futures",
+        "description": "Explore dark futures with these dystopian films.",
+        "video_url": "https://www.youtube.com/embed/29",
+        "thumbnail_url": "http://example.com/thumbnail29",
+        "genre": "Science"
+    },
+    {
+        "id": 30,
+        "title": "Romantic Fantasies",
+        "description": "Get swept away with these romantic fantasy films.",
+        "video_url": "https://www.youtube.com/embed/30",
+        "thumbnail_url": "http://example.com/thumbnail30",
+        "genre": "Musical"
+    }
+]
