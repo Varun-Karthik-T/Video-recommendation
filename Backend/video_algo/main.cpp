@@ -13,7 +13,7 @@ public:
 
     void before_handle(crow::request &req, crow::response &res, context &)
     {
-        res.add_header("Access-Control-Allow-Origin", "*"); // Allow all origins
+        res.add_header("Access-Control-Allow-Origin", "*"); 
         res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
@@ -26,11 +26,23 @@ public:
 
     void after_handle(crow::request &req, crow::response &res, context &)
     {
-        res.add_header("Access-Control-Allow-Origin", "*"); // Allow all origins
+        res.add_header("Access-Control-Allow-Origin", "*");
         res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     }
 };
+
+vector<string> splitGenres(const string &genres)
+{
+    vector<string> result;
+    stringstream ss(genres);
+    string genre;
+    while (getline(ss, genre, ' '))
+    { // assuming genres are space-separated
+        result.push_back(genre);
+    }
+    return result;
+}
 
 int main()
 {
@@ -127,8 +139,8 @@ int main()
 
         for (const auto &video : splayVideos)
         {
-            
-            vector<Video> relatedVideos = graph.getRelatedVideos(video.id, video.genres, 4);
+            vector<string> targetgenres = splitGenres(video.genres);
+            vector<Video> relatedVideos = graph.getRelatedVideos(video.id, targetgenres, 4);
           
           
             for (const auto &relatedVideo : relatedVideos)
@@ -140,21 +152,21 @@ int main()
             }
         }
         
-        if (suggestedVideos.size() < 15)
-        {
-            vector<Video> allVideos = graph.getAllVideos();
-            for (const auto &video : allVideos)
-            {
-                if (uniqueIds.find(video.id) == uniqueIds.end())
-                {   
-                    suggestedVideos.push_back(video);
-                    uniqueIds.insert(video.id); 
-                    if (suggestedVideos.size() >= 15) {
-                        break;
-                    }
-                }
-            }
-        }
+        // if (suggestedVideos.size() < 15)
+        // {
+        //     vector<Video> allVideos = graph.getAllVideos();
+        //     for (const auto &video : allVideos)
+        //     {
+        //         if (uniqueIds.find(video.id) == uniqueIds.end())
+        //         {   
+        //             suggestedVideos.push_back(video);
+        //             uniqueIds.insert(video.id); 
+        //             if (suggestedVideos.size() >= 15) {
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
         cout<<"Suggested videos are:\n";
         for (int i = 0; i < suggestedVideos.size(); ++i)
         {

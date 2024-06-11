@@ -38,12 +38,12 @@ public:
         return allVideos;
     }
 
-    vector<Video> aStar(int startId, const string &targetGenre, int numResults)
+    vector<Video> aStar(int startId, const vector<string> &targetGenres, int numResults)
     {
-        using QueueElement = pair<int, int>;
+        using QueueElement = pair<float, int>; 
         priority_queue<QueueElement, vector<QueueElement>, greater<QueueElement>> pq;
         unordered_map<int, int> cost;
-        unordered_map<int, int> heuristic;
+        unordered_map<int, float> heuristic;
         unordered_map<int, int> cameFrom;
         vector<Video> foundVideos;
 
@@ -56,7 +56,6 @@ public:
         {
             QueueElement currentElement = pq.top();
             pq.pop();
-            int currentCost = currentElement.first;
             int currentId = currentElement.second;
 
             if (visited.find(currentId) != visited.end())
@@ -65,7 +64,7 @@ public:
             }
             visited.insert(currentId);
 
-            if (currentId != startId && videos[currentId].genres.find(targetGenre) != string::npos)
+            if (currentId != startId && estimateHeuristic(currentId, targetGenres) > 0.5f)
             {
                 foundVideos.push_back(videos[currentId]);
             }
@@ -74,12 +73,12 @@ public:
             {
                 int neighborId = neighbor.first;
                 int weight = neighbor.second;
-                int newCost = currentCost + weight;
+                int newCost = cost[currentId] + weight;
                 if (cost.find(neighborId) == cost.end() || newCost < cost[neighborId])
                 {
                     cost[neighborId] = newCost;
-                    heuristic[neighborId] = newCost + estimateHeuristic(neighborId, targetGenre);
-                    pq.push({heuristic[neighborId], neighborId});
+                    float heuristicValue = 1.0f - estimateHeuristic(neighborId, targetGenres); // Inverted heuristic
+                    pq.push({newCost + heuristicValue, neighborId});
                     cameFrom[neighborId] = currentId;
                 }
             }
@@ -87,65 +86,13 @@ public:
         return reconstructPath(startId, foundVideos, cameFrom);
     }
 
-    vector<Video> aStar1(int startId, const string &targetGenre, int numResults)
+    vector<Video> getRelatedVideos(int id, const vector<string> &targetGenres, int numResults)
     {
-
-        using QueueElement = pair<int, int>;
-        priority_queue<QueueElement, vector<QueueElement>, greater<QueueElement>> pq;
-        unordered_map<int, int> cost;
-        unordered_map<int, int> heuristic;
-        unordered_map<int, int> cameFrom;
-        vector<Video> foundVideos;
-
-        pq.push({0, startId});
-        cost[startId] = 0;
-
-        unordered_set<int> visited;
-        while (!pq.empty() && foundVideos.size() < numResults)
+        for (const auto &genre : targetGenres)
         {
-
-            QueueElement currentElement = pq.top();
-
-            pq.pop();
-            int currentCost = currentElement.first;
-            int currentId = currentElement.second;
-
-            if (visited.find(currentId) != visited.end())
-            {
-                continue;
-            }
-            visited.insert(currentId);
-
-            if (currentId != startId && videos[currentId].genres.find(targetGenre) != string::npos)
-            {
-
-                foundVideos.push_back(videos[currentId]);
-            }
-
-            for (const auto &neighbor : adjList[currentId])
-            {
-                int neighborId = neighbor.first;
-                int weight = neighbor.second;
-                int newCost = currentCost + weight;
-                if (cost.find(neighborId) == cost.end() || newCost < cost[neighborId])
-                {
-                    cost[neighborId] = newCost;
-                    heuristic[neighborId] = newCost + estimateHeuristic(neighborId, targetGenre);
-                    pq.push({heuristic[neighborId], neighborId});
-                    cameFrom[neighborId] = currentId;
-                }
-            }
+            cout << genre << endl;
         }
-        vector<Video> path = reconstructPath(startId, foundVideos, cameFrom);
-
-        return foundVideos;
-    }
-
-    vector<Video> getRelatedVideos(int id, const string &targetGenre, int numResults)
-    {
-
-        auto result = aStar1(id, targetGenre, numResults);
-        return result;
+        return aStar(id, targetGenres, numResults);
     }
 
     void loadVertices(const string &filename)
@@ -228,9 +175,17 @@ private:
     unordered_map<int, vector<pair<int, int>>> adjList;
     unordered_map<int, Video> videos;
 
-    int estimateHeuristic(int id, const string &targetGenre)
+    float estimateHeuristic(int id, const vector<string> &targetGenres)
     {
-        return videos[id].genres.find(targetGenre) != string::npos ? 0 : 1;
+        int matchCount = 0;
+        for (const auto &genre : targetGenres)
+        {
+            if (videos[id].genres.find(genre) != string::npos)
+            {
+                matchCount++;
+            }
+        }
+        return static_cast<float>(matchCount) / targetGenres.size();
     }
 
     vector<Video> reconstructPath(int startId, const vector<Video> &foundVideos, unordered_map<int, int> &cameFrom)
@@ -242,7 +197,6 @@ private:
         {
             if (!firstPath)
             {
-
                 path.push_back(Video(-1, "----------", "----------", "----------", "----------", "----------"));
             }
             firstPath = false;
